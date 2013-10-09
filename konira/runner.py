@@ -1,6 +1,7 @@
 import re
 import inspect
 import sys
+import types
 from decimal          import Decimal
 from konira.exc       import KoniraFirstFail, KoniraNoSkip
 from konira.util      import StopWatch, get_class_name, get_let_attrs, set_let_attrs
@@ -230,11 +231,12 @@ def get_methods(suite, method_name):
     return methods
 
 
-
 def _collect_classes(path):
     global_modules = map(globals_from_file, [path])
-    return [i for i in global_modules[0].values() if callable(i) and i.__name__.startswith('Case_')]
-
+    has_case_class_name = lambda s: s.__name__.startswith('Case_')
+    is_a_class = lambda s: isinstance(s, (types.ClassType, types.TypeType))
+    is_a_case_class = lambda s: is_a_class(s) and has_case_class_name(s)
+    return filter(is_a_case_class, global_modules[0].values())
 
 
 def _collect_methods(module):
