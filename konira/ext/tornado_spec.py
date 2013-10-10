@@ -48,7 +48,7 @@ class AsyncHTTPSpec(AsyncHTTPTestCase, UnittestSpecBase):
 
         """
         if "body" not in kwargs:
-            data = kwargs.pop("data")
+            data = kwargs.pop("data", None)
             as_json = kwargs.pop("as_json", False)
             method = kwargs.get("method")
             headers = kwargs.get("headers", {})
@@ -59,7 +59,7 @@ class AsyncHTTPSpec(AsyncHTTPTestCase, UnittestSpecBase):
                         headers['Content-Type'] = "application/json"
                     else:
                         kwargs["body"] = urllib.urlencode(data.items())
-                elif data:
+                elif data is not None:
                     kwargs["body"] = str(data)
             else:
                 assert isinstance(data, dict)
