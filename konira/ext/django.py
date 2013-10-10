@@ -55,10 +55,8 @@ class Spec(DjangoTestSuiteRunner):
         self.setup_test_environment()
         self.old_config = self.setup_databases()
 
-
     def _before_each(self):
         pass
-
 
     def _after_each(self):
         pass
