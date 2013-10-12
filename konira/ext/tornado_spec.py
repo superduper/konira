@@ -58,6 +58,7 @@ class AsyncHTTPSpec(AsyncHTTPTestCase, UnittestSpecBase):
                         kwargs["body"] = json.dumps(data)
                         headers['Content-Type'] = "application/json"
                     else:
+                        headers['Content-Type'] = "application/x-www-form-urlencoded"
                         kwargs["body"] = urllib.urlencode(data.items())
                 elif data is not None:
                     kwargs["body"] = str(data)
