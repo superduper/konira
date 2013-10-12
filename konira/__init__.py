@@ -207,7 +207,7 @@ Matching Options:
 
             # PDB option
             if args.has(['--pdb']):
-                self.config['pdf_on_fail'] = True
+                self.config['pdb_on_fail'] = True
 
             # Coverage options
             if args.has('cover'):
