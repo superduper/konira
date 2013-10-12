@@ -99,8 +99,13 @@ class Runner(object):
                         exc_name = e.__class__.__name__
                        )
                     )
-                if self.config.get('pdb_on_fail'):
+
+                is_assert_error = isinstance(e, AssertionError)
+                if is_assert_error and self.config.get('pdb_on_fail'):
                     pdb_post_postmortem()
+                elif not is_assert_error and self.config.get('pdb'):
+                    pdb_post_postmortem()
+
                 if self.config.get('first_fail'):
                     raise KoniraFirstFail
 

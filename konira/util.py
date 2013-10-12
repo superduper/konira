@@ -109,7 +109,8 @@ def pdb_post_postmortem(tb=None):
 
 runner_options = dict(
         first_fail = False,
-        pdf_on_fail= False,
+        pdb_on_fail= False,
+        pdb        = False,
         capturing  = True,
         traceback  = False,
         dotted     = False,

@@ -34,7 +34,8 @@ Control Options:
     -p, profile         Enables profiling displaying the 10 slowest tests
                         forces dotted output.
     --debug             Don't remove internal tracebacks
-    --pdb               Drop to PDB on failure
+    --pdb               Drop to PDB on unexpected exceptions
+    --pdb-failure       Drop to PDB on assertion failures
 
 Collection options:
     --collect-match     Provide a regex to match files for collection and avoiding
@@ -207,6 +208,10 @@ Matching Options:
 
             # PDB option
             if args.has(['--pdb']):
+                self.config['pdb'] = True
+
+            # PDB on failure option
+            if args.has(['--pdb-failure']):
                 self.config['pdb_on_fail'] = True
 
             # Coverage options
