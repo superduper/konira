@@ -92,9 +92,24 @@ class StopWatch(object):
             return _elapsed[:5]
         return _elapsed
 
+def pdb_post_postmortem(tb=None):
+    try:
+        import pudb
+        pudb.post_mortem(tb)
+    except ImportError:
+        try:
+            import ipdb
+            ipdb.post_mortem(tb)
+        except ImportError:
+            import pdb
+            pdb.post_mortem(tb)
+
+
+
 
 runner_options = dict(
         first_fail = False,
+        pdf_on_fail= False,
         capturing  = True,
         traceback  = False,
         dotted     = False,

@@ -4,7 +4,7 @@ import sys
 import types
 from decimal          import Decimal
 from konira.exc       import KoniraFirstFail, KoniraNoSkip
-from konira.util      import StopWatch, get_class_name, get_let_attrs, set_let_attrs
+from konira.util      import StopWatch, get_class_name, get_let_attrs, set_let_attrs, pdb_post_postmortem
 from konira.collector import globals_from_file
 from konira.output    import TerminalWriter
 
@@ -99,6 +99,8 @@ class Runner(object):
                         exc_name = e.__class__.__name__
                        )
                     )
+                if self.config.get('pdb_on_fail'):
+                    pdb_post_postmortem()
                 if self.config.get('first_fail'):
                     raise KoniraFirstFail
 
