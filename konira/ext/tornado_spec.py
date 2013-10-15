@@ -69,6 +69,8 @@ class AsyncHTTPSpec(AsyncHTTPTestCase, UnittestSpecBase):
                     path += "?" + encoded_params
                 else:
                     path += "&" + encoded_params
+            if headers:
+                kwargs["headers"] = dict(kwargs.get("headers", {}), **headers)
         return super(AsyncHTTPSpec, self).fetch(path, **kwargs)
 
     def parse_response_body(self, response):
