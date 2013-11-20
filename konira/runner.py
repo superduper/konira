@@ -258,6 +258,7 @@ def _collect_methods(module):
     valid_method_name = re.compile(r'it_[_a-z]\w*$', re.IGNORECASE)
     def method_lineno(s): 
         return module.__source__.index(s)
+    method_lineno = lambda s: getattr(module, s).im_func.func_code.co_firstlineno
     methods = [i for i in dir(module) if valid_method_name.match(i)]
     methods.sort(key=method_lineno)
     return methods
