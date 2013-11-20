@@ -69,7 +69,8 @@ def globals_from_file(filename):
 
     # restore the original sys.path
     sys.path[0] = old_path0
-    return globals_
+    return globals_, data
+
 
 
 

@@ -219,12 +219,10 @@ class TestEnviron(object):
 
 def get_classes(filename, class_name):
     if class_name:
-        classes = [i for i in _collect_classes(filename)
+        return  [i for i in _collect_classes(filename)
                     if class_name == get_class_name(i)]
     else:
-        classes = [i for i in _collect_classes(filename)]
-
-    return classes
+        return _collect_classes(filename)
 
 
 
@@ -234,23 +232,34 @@ def get_methods(suite, method_name):
                     if i == method_name]
     else:
         methods = _collect_methods(suite)
-
     return methods
 
 
 def _collect_classes(path):
-    global_modules = map(globals_from_file, [path])
+    # parse and compile file
+    global_modules, source_txt = globals_from_file(path)
+    # will be used later for sorting methods
+    attach_source = lambda cls: setattr(cls, '__source__', source_txt)
+    # filters
     has_case_class_name = lambda s: s.__name__.startswith('Case_')
     is_a_class = lambda s: isinstance(s, (types.ClassType, types.TypeType))
     is_a_case_class = lambda s: is_a_class(s) and has_case_class_name(s)
-    return filter(is_a_case_class, global_modules[0].values())
+    # sort key extractor
+    cls_pos = lambda cls: source_txt.index(cls.__name__)
+    # build the case class list
+    case_cls_list = filter(is_a_case_class, global_modules.values())
+    case_cls_list.sort(cls_pos)
+    # modify classes, attaching source code
+    map(attach_source, case_cls_list)
+    return case_cls_list
 
 
 def _collect_methods(module):
     valid_method_name = re.compile(r'it_[_a-z]\w*$', re.IGNORECASE)
-    lineno = lambda s: getattr(module, s).im_func.func_code.co_firstlineno
+    def method_lineno(s): 
+        return module.__source__.index(s)
     methods = [i for i in dir(module) if valid_method_name.match(i)]
-    methods.sort(key=lineno)
+    methods.sort(key=method_lineno)
     return methods
 
 
@@ -264,4 +273,5 @@ def safe_skip_call(env_call):
         return False
     except Exception:
         return False
+
 
