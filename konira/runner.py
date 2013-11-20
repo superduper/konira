@@ -248,7 +248,7 @@ def _collect_classes(path):
     cls_pos = lambda cls: source_txt.index(cls.__name__)
     # build the case class list
     case_cls_list = filter(is_a_case_class, global_modules.values())
-    case_cls_list.sort(cls_pos)
+    case_cls_list.sort(key=cls_pos)
     # modify classes, attaching source code
     map(attach_source, case_cls_list)
     return case_cls_list
